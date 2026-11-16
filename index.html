@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Grille de maturité des revues de morbi-mortalité (RMM), auto-évaluation individuelle ou collective.">
+<title>Grille de maturité des RMM – Version 25</title>
+<style>
+:root{--ink:#183047;--muted:#607386;--line:#d9e2ea;--soft:#f3f7fa;--blue:#176b87;--blue2:#e8f3f7;--green:#287a57;--white:#fff;--shadow:0 8px 28px #16324a12}
+*{box-sizing:border-box}body{margin:0;background:#f7f9fb;color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:linear-gradient(120deg,#12384f,#176b87);color:white;padding:42px 20px 36px}
+header .wrap,main{max-width:1280px;margin:auto;width:100%}.site-kicker{font-size:.82rem;font-weight:800;letter-spacing:.08em;margin-bottom:9px}header h1{font-size:clamp(1.8rem,4vw,2.65rem);line-height:1.15;margin:0 0 10px}header p{max-width:760px;margin:0;color:#e2eef3}
+main{padding:26px 18px 60px}.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:22px;margin:0 0 20px;box-shadow:var(--shadow)}
+h2{font-size:1.35rem;margin:0 0 12px}h3{font-size:1.08rem;margin:0 0 8px}.muted{color:var(--muted)}.small{font-size:.9rem}.statement{border-left:4px solid var(--blue);padding:12px 16px;background:var(--blue2);border-radius:0 10px 10px 0;font-weight:600;margin:16px 0}
+.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}.level{background:var(--soft);padding:12px;border-radius:10px}.level b{display:block}
+.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.choice{border:2px solid var(--line);border-radius:14px;padding:18px;background:white;text-align:left;cursor:pointer;color:inherit;transition:.15s}.choice:hover,.choice.selected{border-color:var(--blue);background:var(--blue2)}.choice strong{display:block;font-size:1.1rem;margin:6px 0}.choice .count{color:var(--blue);font-weight:700}
+button,.button{border:0;border-radius:9px;background:var(--blue);color:white;padding:10px 15px;font:inherit;font-weight:650;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:7px}button:hover,.button:hover{filter:brightness(.94)}button.secondary,.button.secondary{background:#eaf0f4;color:var(--ink)}button.danger{background:#a33b3b}.toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.toolbar .spacer{flex:1}
+label{font-weight:600}select,input[type=text]{font:inherit;padding:9px 11px;border:1px solid #bac9d5;border-radius:8px;background:white;color:var(--ink)}
+.hidden{display:none!important}.criterion{border:1px solid var(--line);border-radius:13px;margin:14px 0;overflow:hidden;background:white}.criterion-head{padding:15px 17px;background:#f4f7f9;display:flex;gap:12px;align-items:flex-start}.num{background:#dcebf1;color:#15536b;border-radius:8px;min-width:34px;height:34px;display:grid;place-items:center;font-weight:800}.criterion-head h3{margin:2px 0 3px}.criterion-body{padding:15px 17px}.levels-list{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.level-option{border:1px solid var(--line);padding:12px;border-radius:10px;display:flex;gap:10px;align-items:flex-start;cursor:pointer}.level-option:has(input:checked){border-color:var(--blue);background:var(--blue2)}.level-option input{margin-top:5px;accent-color:var(--blue)}.level-option b{display:block;margin-bottom:3px}.progress{height:9px;background:#e8eef2;border-radius:99px;overflow:hidden}.progress>span{display:block;height:100%;background:var(--green);width:0}
+.yearlist{display:flex;gap:8px;flex-wrap:wrap}.yearcheck{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-weight:500;background:white}.yearcheck input{accent-color:var(--blue)}
+.chartwrap{max-width:720px;min-height:280px;margin:16px auto;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff}.chartwrap canvas{width:100%;height:auto;display:block}.legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+footer{text-align:center;color:var(--muted);padding:22px;font-size:.85rem}
+.notice{padding:12px 14px;background:#fff8e8;border:1px solid #f0dfb5;border-radius:9px;color:#624d20}
+@media(max-width:700px){.levels{grid-template-columns:repeat(2,1fr)}.choices{grid-template-columns:1fr}.levels-list{grid-template-columns:1fr}.panel{padding:17px}header{padding:32px 18px}}
+@media print{body{background:white}header{background:white;color:#183047;padding:15px 0}header p{color:#183047}.no-print,button,.toolbar{display:none!important}.panel,.criterion{box-shadow:none;break-inside:avoid}.criterion{break-inside:avoid}main{padding:0}.criterion-head{background:#f1f1f1}}
+
+/* Présentation en tableau, proche d'une grille de maturité */
+.matrix-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
+.matrix{width:100%;border-collapse:collapse;min-width:0;font-size:.93rem;line-height:1.48;table-layout:fixed}
+.matrix th,.matrix td{border:1px solid var(--line);padding:15px 14px;vertical-align:top;text-align:left}
+.matrix thead th{background:#eaf1f5;color:#183047;position:sticky;top:0;z-index:1}
+.matrix thead th:first-child{width:18%}
+.matrix thead th:not(:first-child){width:20.5%}
+.matrix tbody th{background:#f5f8fa;font-weight:700}
+.matrix .level-head{display:block;font-size:.98rem}
+.matrix .level-sub{display:block;font-size:.78rem;color:#607386;font-weight:500}
+.matrix td:has(input:checked){background:#e8f3f7;box-shadow:inset 0 0 0 2px #176b87}
+.matrix td label{display:flex;gap:8px;align-items:flex-start;font-weight:400;cursor:pointer}
+.matrix td input{margin-top:4px;accent-color:#176b87;flex:0 0 auto}
+.matrix tr:focus-within th{background:#e8f3f7}
+@media(max-width:900px){.matrix{min-width:1120px;font-size:.85rem}.matrix th,.matrix td{padding:9px}.matrix-wrap{overflow-x:auto}}
+
+#pdfReport{display:none}
+#pdfReport .pdf-kicker{font-size:11px;font-weight:800;letter-spacing:.08em;margin-bottom:7px;color:#202020}
+#pdfReport h1{font-size:22px;line-height:1.12;margin:0 0 8px;color:#111}
+#pdfReport .pdf-meta{font-size:11px;border-bottom:3px solid #111;padding-bottom:6px;margin-bottom:9px}
+#pdfReport .pdf-columns{display:flex;flex-direction:column;gap:7px;align-items:stretch}
+#pdfReport .pdf-chart{width:100%;text-align:center}
+#pdfReport .pdf-chart img{display:block;width:auto;max-width:100%;height:190px;max-height:190px;margin:0 auto;object-fit:contain}
+#pdfReport .pdf-results{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+#pdfReport .pdf-results .report-table{width:100%}
+#pdfReport .report-table{width:100%;border-collapse:collapse;font-size:9px;min-width:0;table-layout:fixed}
+#pdfReport .report-table tr{border-bottom:1px solid #cbd1d5;break-inside:avoid}
+#pdfReport .report-table th,#pdfReport .report-table td{padding:5px 4px;text-align:left;vertical-align:top}
+#pdfReport .report-table th{width:31%;font-size:9px}
+#pdfReport .report-table td:nth-child(2){width:24%} #pdfReport .report-table td:nth-child(3){width:45%}
+#pdfReport .level-badge{display:inline-block;border-radius:7px;padding:5px 7px;font-weight:800;white-space:nowrap;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+#pdfReport .level-1{background:#929292;color:#fff}
+#pdfReport .level-2{background:#2785cf;color:#fff}
+#pdfReport .level-3{background:#42a34a;color:#fff}
+#pdfReport .level-4{background:#f4c644;color:#111}
+#pdfReport .pdf-chart h2{font-size:15px;margin:0 0 5px}
+#pdfReport .pdf-chart img{width:100%;max-height:330px;object-fit:contain}
+#pdfReport .pdf-legend{display:flex;flex-wrap:wrap;gap:8px;font-size:9px;color:#333}
+#pdfReport .pdf-legend span{padding:0;border-radius:0;font-weight:700}
+#pdfReport .pdf-legend .level-1{background:#929292;color:white}
+#pdfReport .pdf-legend .level-2{background:#2785cf;color:white}
+#pdfReport .pdf-legend .level-3{background:#42a34a;color:white}
+#pdfReport .pdf-legend .level-4{background:#f4c644;color:#111}
+#pdfReport .pdf-foot{font-size:9px;color:#555;margin-top:8px}
+@media print{
+ @page{size:A4 landscape;margin:6mm}
+ html,body{margin:0!important;padding:0!important;width:auto!important;height:auto!important;min-height:0!important;background:#fff!important;overflow:visible!important}
+ body *{visibility:hidden!important}
+ #pdfReport,#pdfReport *{visibility:visible!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+ #pdfReport{display:block!important;position:absolute!important;left:0!important;top:0!important;width:100%!important;height:auto!important;max-height:none!important;overflow:visible!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important}
+ #pdfReport .pdf-kicker{font-size:8pt!important;margin:0 0 1.5mm!important}
+ #pdfReport h1{font-size:15pt!important;line-height:1.05!important;margin:0 0 1.5mm!important}
+ #pdfReport .pdf-meta{font-size:8pt!important;padding-bottom:1.5mm!important;margin-bottom:1.5mm!important;border-bottom:2px solid #111!important}
+ #pdfReport .pdf-columns{display:flex!important;flex-direction:column!important;gap:0!important}
+ #pdfReport .pdf-chart{width:100%!important;text-align:center!important;flex:0 0 auto!important}
+ #pdfReport .pdf-chart h2{font-size:9pt!important;margin:0!important}
+ #pdfReport .pdf-chart img{display:block!important;height:48mm!important;max-height:48mm!important;width:auto!important;max-width:100%!important;margin:0 auto!important;object-fit:contain!important}
+ #pdfReport .pdf-legend{font-size:7pt!important;margin:0!important;justify-content:center!important}
+ #pdfReport .pdf-results{display:grid!important;grid-template-columns:1fr 1fr!important;gap:5mm!important;align-items:start!important}
+ #pdfReport .report-table{width:100%!important;border-collapse:collapse!important;font-size:6pt!important;table-layout:fixed!important}
+ #pdfReport .report-table tr{break-inside:avoid!important;page-break-inside:avoid!important;border-bottom:1px solid #cbd1d5!important}
+ #pdfReport .report-table th,#pdfReport .report-table td{padding:.8mm!important;text-align:left!important;vertical-align:top!important;line-height:1.08!important}
+ #pdfReport .report-table th{width:30%!important;font-size:6pt!important}
+ #pdfReport .report-table td:nth-child(2){width:25%!important}
+ #pdfReport .report-table td:nth-child(3){width:45%!important}
+ #pdfReport .level-badge{display:inline-block!important;border-radius:5px!important;padding:.8mm 1mm!important;font-size:5.7pt!important;white-space:normal!important;font-weight:800!important}
+ #pdfReport .level-1{background:#929292!important;color:#fff!important}
+ #pdfReport .level-2{background:#2785cf!important;color:#fff!important}
+ #pdfReport .level-3{background:#42a34a!important;color:#fff!important}
+ #pdfReport .level-4{background:#f4c644!important;color:#111!important}
+ #pdfReport .pdf-foot{font-size:6.5pt!important;margin-top:1mm!important}
+}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="site-kicker">PILIER « SECURITE DES PATIENTS » · ACTIVITÉ OBLIGATOIRE</div>
+<h1>Grille de maturité —<br>Revue de mortalité et de morbidité (RMM)</h1>
+<p>Un outil d’auto-évaluation pour accompagner les démarches d’accréditation individuelles et en équipe, et soutenir l’amélioration continue de la sécurité des soins.</p>
+</div></header>
+<main>
+<section id="intro" class="panel">
+<h2>Comment remplir la grille ?</h2>
+<p>Cette grille est un outil d’auto-évaluation destiné à accompagner les médecins et les équipes engagés dans une démarche d’accréditation. Pour chaque critère, choisissez le niveau qui correspond le mieux à votre pratique actuelle.</p>
+<div class="statement">La RMM est une démarche collective, structurée, anonymisée et déculpabilisante, qui transforme l'expérience des professionnels et des patients en apprentissages partagés et en améliorations effectives de la sécurité des soins.</div>
+<p><strong>Vous pouvez générer un pdf qui peut être ajouté en pièce jointe dans le SIAM dans le pilier « SECURITE DES PATIENTS » de votre bilan pour votre accréditation.</strong></p>
+
+</section>
+
+<section id="choice" class="panel">
+<h2>Choisir le type d’évaluation</h2>
+<p class="muted">Sélectionnez le cadre correspondant à votre démarche. La grille comporte toujours 10 critères communs et 4 critères complémentaires adaptés au choix.</p>
+<div class="choices">
+<button class="choice" id="individual" type="button"><span>👤</span><strong>Évaluation individuelle</strong><span class="count">11 critères communs + 4 critères individuels = 15</span></button>
+<button class="choice" id="team" type="button"><span>👥</span><strong>Évaluation en équipe</strong><span class="count">11 critères communs + 4 critères d’équipe = 15</span></button>
+</div>
+</section>
+
+<section id="workspace" class="hidden">
+<div class="panel">
+<div class="toolbar">
+<div><h2 id="gridTitle">Votre grille</h2><div class="muted small" id="gridSubtitle"></div></div><span class="spacer"></span>
+<button class="secondary" id="backChoice">Basculer vers l’évaluation individuelle</button>
+</div>
+<hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+<div class="toolbar" style="margin:12px 0">
+<label for="identityInput" id="identityLabel">Nom et prénom</label>
+<input id="identityInput" type="text" placeholder="Nom et prénom" style="min-width:240px;flex:1">
+</div>
+<div class="toolbar">
+<label for="yearSelect">Année de l’évaluation</label>
+<select id="yearSelect"></select>
+<label for="dateInput">Date de réalisation</label>
+<input id="dateInput" type="text" readonly style="width:125px">
+</div>
+<p class="muted small">L’année en cours est présélectionnée automatiquement. Les six années proposées couvrent l’année actuelle et les cinq suivantes. Les évaluations antérieures restent conservées dans l’historique.</p>
+<div class="toolbar">
+<div style="flex:1;min-width:200px"><div class="progress"><span id="progressBar"></span></div><div class="small muted" id="progressText">0 / 15 critères renseignés</div></div>
+</div>
+</div>
+<div id="criteria"></div>
+<section class="panel" id="maturityProfile" aria-labelledby="profileTitle">
+<h2 id="profileTitle">Profil de maturité et suivi pluriannuel</h2>
+<p class="muted small">Le diagramme radar présente le profil de maturité pour chaque année sélectionnée. Cochez ou décochez les années à comparer. Décocher une année masque uniquement ses données du radar : l’évaluation reste conservée dans l’historique.</p>
+<div id="yearChecks" class="yearlist"></div>
+<div class="chartwrap"><canvas id="radar" width="650" height="560" aria-label="Diagramme radar du profil de maturité"></canvas></div>
+<div id="legend" class="legend small"></div>
+</section>
+<div class="panel no-print" style="margin-top:14px">
+<div class="toolbar"><div class="muted small">Pensez à enregistrer votre évaluation avant de quitter la page.</div><span class="spacer"></span><button id="saveBtn">Enregistrer cette année</button></div>
+</div>
+<div id="pdfReport" class="panel hidden"></div>
+<div class="panel">
+<div class="toolbar no-print" style="margin-top:18px">
+<button id="pdfBtn">Exporter / imprimer en PDF</button>
+<button class="secondary" id="htmlBtn">Télécharger la synthèse HTML</button>
+<button class="secondary" id="resetYear">Effacer cette année</button><button class="danger" id="resetAll">Réinitialiser la grille</button>
+</div>
+<p class="muted small">Les évaluations sont conservées localement dans ce navigateur. Le PDF et la synthèse HTML ne contiennent que les niveaux sélectionnés et leurs descriptions.</p>
+<div id="status" class="small" role="status" aria-live="polite"></div>
+</div>
+</section>
+</main>
+<footer>Grille de maturité RMM – Outil d’auto-évaluation. Ne saisissez aucune donnée nominative ou information permettant d’identifier un patient.</footer>
+
+<script>
+const common = [
+["Organisation et régularité des RMM",[
+"Absence de RMM ou réunions très occasionnelles.",
+"RMM organisées de façon ponctuelle et irrégulière.",
+"RMM organisées selon une fréquence définie et connue des participants.",
+"RMM organisées selon un calendrier régulier et pérenne."
+]],
+["Modalités d’organisation et de choix des RMM / Charte",[
+"Absence de charte ou de modalités écrites. Pas de référent clairement désigné ; périodicité, préparation, sélection des cas et traçabilité ne sont pas définies.",
+"Organisation partiellement définie : référent identifié et réunions programmées, mais périodicité ou durée, information préalable, préparation, participants ou critères de sélection des cas restent incomplets ou irréguliers.",
+"Charte ou procédure formalisée précisant le référent chargé de préparer et d’animer les réunions, leur périodicité et leur durée, l’information préalable des participants (méthode et résumé anonymisé), la préparation des cas et les critères de sélection concertés avec les médecins selon la gravité et l’évitabilité des événements. Les personnes invitées et les modalités de réunion sont définies.",
+"Charte connue et appliquée : réunions régulières (par exemple 1 h 30 tous les quatre mois), documents préparatoires transmis environ 15 jours avant, méthode et canevas d’analyse communiqués. Le choix des cas est concerté avec les médecins selon la gravité et l’évitabilité. Les modalités de traçabilité et d’archivage hors dossier patient sont définies ; une fiche de suivi des actions et un bilan annuel (réunions, présents, cas examinés, actions et suivi) sont réalisés."
+]],
+["Pluridisciplinarité et multiprofessionnalité",[
+"Analyse principalement mono-disciplinaire et mono-professionnelle, sans sollicitation des acteurs concernés.",
+"Participation d’autres disciplines ou professions de façon ponctuelle. La direction qualité n’est pas associée ou l’association reste informelle.",
+"Participation des professionnels concernés par l’événement selon une approche pluridisciplinaire et multiprofessionnelle. La direction qualité peut participer à la RMM à l’invitation du référent.",
+"Approche transversale associant les spécialités, professions et fonctions support concernées ; la direction qualité participe à la RMM à l’invitation du référent. Une participation inter-établissements est organisée lorsque l’histoire clinique implique des avis ou transferts vers des tiers."
+]],
+["Méthode d’analyse et qualité de l’analyse systémique",[
+"Présentation descriptive de l’événement, sans méthode identifiée ; recherche principalement centrée sur l’erreur ou la responsabilité individuelle. Les barrières de sécurité et les actions correctives ne sont pas identifiées.",
+"Utilisation occasionnelle d’une méthode (ALARM, ALARM-E, ORION, REMED ou autre méthode structurée adaptée) ; identification partielle des causes immédiates et facteurs contributifs. Les barrières ou les actions correctives restent peu explicites.",
+"Utilisation structurée d’une méthode adaptée à l’événement ; analyse de la chronologie, des causes immédiates et profondes, des facteurs humains, organisationnels, techniques et environnementaux. Les barrières de sécurité et les actions correctives sont clairement identifiées.",
+"Maîtrise et choix pertinent de la méthode ; préparation en amont, implication des professionnels concernés, intégration du récit du patient ou de ses proches lorsque pertinent. Les barrières de sécurité, leurs défaillances et les actions correctives sont clairement reliées aux enseignements de l’analyse."
+]],
+["Anonymisation et confidentialité des présentations et des comptes rendus",[
+"Présence de noms ou de données directement identifiantes dans les présentations ou documents ; absence de règles de confidentialité. Toute utilisation d’une IA avant anonymisation des données relève de ce niveau.",
+"Anonymisation incomplète ; des éléments indirectement identifiants peuvent subsister. L’utilisation d’une IA n’est pas encadrée ou son usage après anonymisation n’est pas vérifié.",
+"Anonymisation systématique des présentations et comptes rendus ; confidentialité des échanges et des documents respectée. Toute utilisation éventuelle d’une IA intervient uniquement après anonymisation des données.",
+"Anonymisation rigoureuse et systématique de l'ensemble des supports et restitutions. Toute utilisation éventuelle d’une IA intervient exclusivement après anonymisation complète. Maîtrise des accès, de la conservation, de l'archivage et de la diffusion des documents. Sensibilisation régulière des participants à la confidentialité."
+]],
+["Culture de sécurité et climat de confiance",[
+"Échanges marqués par le jugement, les règlements de compte ou la recherche de responsabilité individuelle. Les erreurs sont abordées de façon culpabilisante. Les situations en cours de judiciarisation ne font pas l’objet d’une vigilance particulière.",
+"Volonté affichée d’éviter la culpabilisation, mais échanges parfois défensifs ou insuffisamment bienveillants ; la dimension éducative et non punitive reste inconstante.",
+"Échanges bienveillants, éducatifs et non punitifs, centrés sur les erreurs et les facteurs contributifs plutôt que sur les personnes. Les règlements de compte sont exclus. Une vigilance est portée aux événements en cours de judiciarisation.",
+"Climat de confiance durable : échanges systématiquement bienveillants, éducatifs et non punitifs ; les erreurs sont analysées comme des occasions d’apprentissage. Les règlements de compte sont exclus et les événements en cours de judiciarisation font l’objet d’une vigilance adaptée."
+]],
+["Recueil et intégration de l’expérience patient",[
+"Expérience du patient ou de ses proches non prise en compte.",
+"Dossier consulté, mais vécu, ressenti et expérience du parcours peu explorés.",
+"Informations disponibles sur le vécu, le ressenti et le parcours recherchées et intégrées à l’analyse lorsque pertinent.",
+"Point de vue du patient ou de ses proches intégré de façon structurée lorsque cela est approprié, dans le respect de leurs droits et de la confidentialité ; expérience utilisée pour concevoir et évaluer les actions."
+]],
+["Formalisation du compte rendu et partage des enseignements",[
+"Absence de fiche de synthèse communicable ou compte rendu comportant la partie analytique (analyse des causes). Le dossier patient ne mentionne pas la réalisation de la RMM.",
+"Fiche de synthèse réalisée, mais elle n’est pas clairement séparée de l’analyse des causes, ou comporte des éléments analytiques. La traçabilité, l’archivage ou la communication restent incomplets.",
+"Fiche de synthèse distincte, seule destinée à être communiquée, limitée à la caractérisation du cas et aux actions correctives. Le compte rendu global anonymisé et les éléments analytiques sont archivés séparément par le référent hors du dossier patient ou détruits. La traçabilité et la communication de la fiche sont organisées.",
+"Fiche de synthèse communicable strictement limitée à la caractérisation du cas et aux actions correctives ; sa traçabilité et sa diffusion sont formalisées. Le compte rendu global anonymisé et les éléments analytiques sont archivés séparément par le référent hors du dossier patient ou détruits. Un bilan annuel récapitule les réunions, participants, cas examinés, actions proposées et leur suivi. Le dossier patient mentionne la réalisation de la RMM, sans retranscription de l’analyse ni des échanges."
+]],
+["Formalisation, suivi et évaluation de l’efficacité du plan d’action avec la cellule qualité",[
+"Absence de plan d’action formalisé ou d’indicateur de suivi intégré aux actions correctives. Le contrôle médical de l’envoi à l’ARS d’un EIG déclaré par l’établissement n’est pas réalisé.",
+"Actions relevées, mais responsables, échéances ou modalités de suivi non systématiques ; implication limitée de la cellule qualité. La mise en œuvre est vérifiée ponctuellement, sans évaluation régulière de l’efficacité.",
+"Plan d’action formalisé avec la cellule qualité. Chaque action comporte un responsable, une échéance et des modalités de suivi ; l’avancement et l’efficacité sont évalués. Un indicateur de suivi est défini lorsque cela est pertinent.",
+"Plan d’action structuré avec la cellule qualité, comportant un indicateur de suivi intégré aux actions correctives (EPP). L’efficacité et la pérennité sont évaluées. L’envoi à l’ARS d’un EIG déclaré par l’établissement est contrôlé par les médecins."
+]],
+["Retour aux participants sur le déroulement et les résultats du plan d’action",[
+"Absence de retour aux participants sur les actions décidées ; les actions correctives ne sont pas diffusées.",
+"Retours occasionnels, sans suivi régulier de l’avancement ; diffusion limitée des actions correctives.",
+"Retour organisé lors de la RMM suivante : actions réalisées, en cours, retardées ou abandonnées, avec explication des raisons. Les actions correctives sont diffusées aux professionnels concernés.",
+"Retour systématique et documenté sur l’avancement, les résultats et l’efficacité ; les actions correctives et les enseignements sont largement diffusés auprès des équipes concernées."
+]],
+["Promotion des RMM dans l’établissement",[
+"RMM peu connues ou non promues dans l’établissement.",
+"Communication ponctuelle auprès des équipes.",
+"Promotion régulière par les responsables médicaux, la direction et la cellule qualité ; RMM reconnues comme outil de gestion des risques et d’amélioration de la qualité et de la sécurité.",
+"RMM soutenues par la gouvernance et intégrées à la politique institutionnelle ; enseignements diffusés et participation encouragée."
+]]
+];
+const individual = [
+["Participation individuelle effective aux RMM",[
+"Présence exceptionnelle moins d’une fois par an.",
+"Participation occasionnelle et irrégulière.",
+"Participation régulière aux RMM programmées (par exemple au moins 50 % des réunions ou deux réunions par an lorsque cela est adapté au contexte).",
+"Participation très régulière (par exemple au moins 75 % des réunions programmées), avec implication active."
+]],
+["Investissement dans la préparation et la présentation des cas",[
+"Ne propose pas de cas et ne participe pas à leur préparation.",
+"Présente occasionnellement un cas, avec une préparation limitée.",
+"Propose ou présente des cas pertinents, recueille les informations et prépare l’analyse en amont.",
+"Identifie activement les événements à analyser, prépare un dossier structuré, la chronologie et une présentation favorisant l’apprentissage collectif."
+]],
+["Contribution personnelle à l’analyse collective",[
+"Participation passive, sans contribution à l’analyse.",
+"Participe aux échanges, mais apporte peu de contributions structurées.",
+"Contribue activement à l’analyse selon la méthode retenue, identifie des facteurs contributifs et propose des pistes d’amélioration.",
+"Contribue à une analyse systémique approfondie, adopte une posture réflexive, partage les enseignements et favorise une culture positive de l’erreur."
+]],
+["Engagement personnel dans les actions d’amélioration",[
+"Ne contribue pas à la définition ou à la réalisation des actions.",
+"Contribution ponctuelle aux actions d’amélioration.",
+"Participe à la définition des actions et assure le suivi de celles dont il est responsable.",
+"Initie ou pilote des actions, contribue à leur évaluation et à leur ajustement, et favorise le partage des améliorations."
+]]
+];
+const team = [
+["Engagement et participation des membres",[
+"Participation très limitée des membres de l’équipe aux RMM.",
+"Participation de plusieurs membres, mais de façon irrégulière ou inégale.",
+"Participation régulière des membres concernés aux RMM.",
+"Engagement collectif très régulier et structuré, avec suivi de la présence des membres."
+]],
+["Investissement des membres dans la préparation et la présentation des cas",[
+"Les membres ne contribuent pas à l’identification, à la préparation ou à la présentation des cas.",
+"Contribution occasionnelle à la préparation ou à la présentation, avec une préparation limitée.",
+"Les membres contribuent à l’identification des situations pertinentes, au recueil des informations et à la préparation des cas.",
+"Les membres s’investissent activement dans l’identification des événements, la préparation structurée des dossiers, la chronologie et les présentations favorisant l’apprentissage collectif."
+]],
+["Contribution des membres à l’analyse",[
+"Participation passive ou très limitée à l’analyse.",
+"Participation aux échanges, mais contributions peu structurées.",
+"Contribution active des membres à l’analyse systémique, à l’identification des facteurs contributifs et aux pistes d’amélioration.",
+"Contribution approfondie et réflexive à l’analyse systémique ; les membres favorisent le partage des enseignements et une culture positive de l’erreur."
+]],
+["Engagement des membres dans les actions d’amélioration, la diffusion des enseignements et la culture de sécurité",[
+"Les membres contribuent peu aux actions d’amélioration ; les enseignements restent limités aux participants.",
+"Contribution ponctuelle aux actions et diffusion occasionnelle des enseignements au sein de l’équipe.",
+"Les membres participent aux actions d’amélioration, à leur suivi et au partage organisé des enseignements avec l’équipe.",
+"Engagement collectif dans la mise en œuvre, l’évaluation et l’ajustement des actions ; diffusion des enseignements au-delà de l’équipe lorsque pertinent et culture de sécurité intégrée aux pratiques."
+]]
+];
+const labels=["Initial","Intermédiaire","Avancé","Expert"];
+let mode=null, currentYear=new Date().getFullYear(), answers={}, saved={}, selectedYears=[];
+const keyFor=()=>`rmm-maturity-v2-${mode}`;
+const criteria=()=>[...common,...(mode==="individual"?individual:team)];
+const $=id=>document.getElementById(id);
+function loadStore(){
+ try{
+  const raw=localStorage.getItem(keyFor());
+  const parsed=raw?JSON.parse(raw):null;
+  const legacyRaw=localStorage.getItem(`rmm-maturity-v1-${mode}`);
+  const legacy=legacyRaw?JSON.parse(legacyRaw):{};
+  const source=(parsed&&typeof parsed==="object"&&!Array.isArray(parsed))?parsed:
+    ((legacy&&typeof legacy==="object"&&!Array.isArray(legacy))?legacy:{});
+  saved={};
+  for(const [year,record] of Object.entries(source)){
+   if(!/^\\d{4}$/.test(String(year))||!record||typeof record!=="object") continue;
+   const clean={};
+   for(let i=0;i<15;i++){
+    const value=Number(record[i]);
+    if(Number.isInteger(value)&&value>=1&&value<=4) clean[i]=value;
+   }
+   if(record._identity) clean._identity=String(record._identity);
+   if(record._completedAt) clean._completedAt=record._completedAt;
+   if(record._evaluationDate) clean._evaluationDate=record._evaluationDate;
+   saved[year]=clean;
+  }
+  if(!parsed&&Object.keys(saved).length) localStorage.setItem(keyFor(),JSON.stringify(saved));
+ }catch(e){
+  // A corrupt saved record must not prevent the grid itself from rendering.
+  saved={};
+ }
+}
+function persist(){localStorage.setItem(keyFor(),JSON.stringify(saved));}
+function showMode(m){
+ mode=m;loadStore();$("choice").classList.add("hidden");$("workspace").classList.remove("hidden");
+ $("gridTitle").textContent=m==="individual"?"Évaluation individuelle":"Évaluation en équipe";
+ $("backChoice").textContent=m==="individual"?"Basculer vers l’évaluation en équipe":"Basculer vers l’évaluation individuelle";
+ $("gridSubtitle").textContent="15 critères : 11 communs et 4 "+(m==="individual"?"individuels":"d’équipe")+".";
+ $("identityLabel").textContent=m==="individual"?"Nom et prénom":"Nom de l’équipe";
+ $("identityInput").placeholder=m==="individual"?"Nom et prénom":"Nom de l’équipe";
+ currentYear=new Date().getFullYear();
+ const sel=$("yearSelect");sel.innerHTML="";
+ for(let y=currentYear;y<currentYear+6;y++){let o=document.createElement("option");o.value=y;o.textContent=y+(y===currentYear?" – année en cours":"");sel.append(o);}
+ const prior=Object.keys(saved).map(Number).filter(y=>y<currentYear).sort((a,b)=>b-a);
+ prior.forEach(y=>{let o=document.createElement("option");o.value=y;o.textContent=y+" – historique";sel.append(o);});
+ sel.value=currentYear;
+ $("dateInput").value=new Date().toLocaleDateString("fr-FR");
+ selectedYears=[...new Set([...Object.keys(saved).map(Number),currentYear])].sort((a,b)=>a-b);
+ renderYearChecks();
+ try{loadYear();}catch(err){answers={};renderCriteria();updateProgress();}
+ try{renderRadar();}catch(err){console.warn("Radar temporairement indisponible",err);}
+}
+function loadYear(){const y=Number($("yearSelect").value);$("printYear").textContent=y;answers={...(saved[y]||{})};$("identityInput").value=answers._identity||"";renderCriteria();updateProgress();renderRadar();}
+function renderCriteria(){
+ const root=$("criteria");root.innerHTML="";
+ const tableWrap=document.createElement("div");tableWrap.className="matrix-wrap";
+ const table=document.createElement("table");table.className="matrix";
+ const thead=document.createElement("thead");
+ thead.innerHTML=`<tr><th scope="col">Critère</th>${labels.map((l,i)=>`<th scope="col"><span class="level-head">Niveau ${i+1}</span><span class="level-sub">${l}</span></th>`).join("")}</tr>`;
+ table.append(thead);
+ const tbody=document.createElement("tbody");
+ criteria().forEach((c,i)=>{
+  const tr=document.createElement("tr");
+  const th=document.createElement("th");th.scope="row";
+  th.innerHTML=`<strong>${i+1}. ${escapeHtml(c[0])}</strong><div class="muted small" style="font-weight:400;margin-top:5px">${i<11?"Critère commun":mode==="individual"?"Critère individuel":"Critère d’équipe"}</div>`;
+  tr.append(th);
+  c[1].forEach((desc,j)=>{
+   const td=document.createElement("td");
+   const lab=document.createElement("label");
+   const radio=document.createElement("input");radio.type="radio";radio.name="criterion-"+i;radio.value=j+1;radio.checked=Number(answers[i])===j+1;
+   radio.setAttribute("aria-label",`Critère ${i+1}, niveau ${j+1} ${labels[j]}`);
+   radio.addEventListener("change",()=>{answers[i]=j+1;updateProgress();renderRadar();});
+   const text=document.createElement("span");text.textContent=desc;
+   lab.append(radio,text);td.append(lab);tr.append(td);
+  });
+  tbody.append(tr);
+ });
+ table.append(tbody);tableWrap.append(table);root.append(tableWrap);
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function updateProgress(){const n=Object.keys(answers).filter(k=>answers[k]>=1&&answers[k]<=4).length;$("progressBar").style.width=(n/15*100)+"%";$("progressText").textContent=`${n} / 15 critères renseignés`;}
+function saveCurrent(){const y=Number($("yearSelect").value);answers._identity=$("identityInput").value.trim();saved[y]={...answers,_completedAt:new Date().toISOString(),_evaluationDate:$("dateInput").value};persist();if(!selectedYears.includes(y)){selectedYears.push(y);selectedYears.sort((a,b)=>a-b);}renderYearChecks();renderRadar();$("status").textContent=`Évaluation ${y} enregistrée sur cet appareil.`;}
+function renderYearChecks(){
+ const root=$("yearChecks");root.innerHTML="";
+ const years=[...new Set([...Object.keys(saved).map(Number),...selectedYears,currentYear])].sort((a,b)=>a-b);
+ years.forEach(y=>{const lab=document.createElement("label");lab.className="yearcheck";const cb=document.createElement("input");cb.type="checkbox";cb.checked=selectedYears.includes(y);cb.addEventListener("change",()=>{selectedYears=cb.checked?[...selectedYears,y]:selectedYears.filter(x=>x!==y);renderRadar();});lab.append(cb,document.createTextNode(y+(saved[y]?" ✓":"")));root.append(lab);});
+}
+const palette=["#176b87","#b35b36","#39845c","#8058a5","#b38a21","#54718e","#b34f78","#4b8e91"];
+const colorForYear=year=>palette[((Number(year)-2026)%palette.length+palette.length)%palette.length];
+function renderRadar(yearFilter=null,updateLegend=true){
+ const canvas=$("radar"),ctx=canvas.getContext("2d"),w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);
+ const availableYears=selectedYears.filter(y=>(saved[y]&&Object.keys(saved[y]).length)||(y===Number($("yearSelect").value)&&Object.keys(answers).length));
+ const dataYears=yearFilter?yearFilter.filter(y=>availableYears.includes(y)):availableYears;
+ const n=criteria().length,cx=w/2,cy=h/2,r=190;
+ ctx.font="12px system-ui";ctx.textAlign="center";ctx.textBaseline="middle";
+ const maturityBands=[
+  {level:4,fill:"rgba(244,198,68,0.20)",line:"#d8b23e"},
+  {level:3,fill:"rgba(66,163,74,0.17)",line:"#429f4b"},
+  {level:2,fill:"rgba(39,133,207,0.15)",line:"#2785cf"},
+  {level:1,fill:"rgba(146,146,146,0.16)",line:"#929292"}
+ ];
+ // Zones concentriques : chaque niveau colore la couronne correspondante.
+ maturityBands.forEach(band=>{
+  ctx.beginPath();
+  for(let i=0;i<n;i++){const a=-Math.PI/2+i*2*Math.PI/n,x=cx+r*band.level/4*Math.cos(a),y=cy+r*band.level/4*Math.sin(a);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+  ctx.closePath();ctx.fillStyle=band.fill;ctx.fill();
+ });
+ for(let level=1;level<=4;level++){ctx.beginPath();for(let i=0;i<n;i++){const a=-Math.PI/2+i*2*Math.PI/n,x=cx+r*level/4*Math.cos(a),y=cy+r*level/4*Math.sin(a);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.closePath();ctx.strokeStyle="#b9c5ce";ctx.lineWidth=1;ctx.stroke();ctx.fillStyle="#40515f";ctx.font="12px system-ui";ctx.fillText(level,cx+4,cy-r*level/4-9);}
+ for(let i=0;i<n;i++){const a=-Math.PI/2+i*2*Math.PI/n,x=cx+r*Math.cos(a),y=cy+r*Math.sin(a);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(x,y);ctx.strokeStyle="#d8e1e8";ctx.stroke();const tx=cx+(r+42)*Math.cos(a),ty=cy+(r+42)*Math.sin(a);ctx.fillStyle="#334b5e";ctx.font="11px system-ui";let short=criteria()[i][0];if(short.length>25)short=short.slice(0,23)+"…";ctx.fillText(short,tx,ty);}
+ dataYears.forEach((year,idx)=>{const yearData=(year===Number($("yearSelect").value)?answers:saved[year])||{};const vals=Array.from({length:n},(_,i)=>Number(yearData[i])||0);if(!vals.some(Boolean))return;ctx.beginPath();vals.forEach((v,i)=>{const a=-Math.PI/2+i*2*Math.PI/n,rr=r*v/4,x=cx+rr*Math.cos(a),y=cy+rr*Math.sin(a);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.strokeStyle=colorForYear(year);ctx.lineWidth=2.5;ctx.stroke();ctx.fillStyle=colorForYear(year)+"22";ctx.fill();vals.forEach((v,i)=>{if(!v)return;const a=-Math.PI/2+i*2*Math.PI/n;ctx.beginPath();ctx.arc(cx+r*v/4*Math.cos(a),cy+r*v/4*Math.sin(a),3.5,0,Math.PI*2);ctx.fillStyle=colorForYear(year);ctx.fill();});});
+ if(updateLegend) $("legend").innerHTML=dataYears.length?dataYears.map(y=>`<span><i class="dot" style="background:${colorForYear(y)}"></i>${y}${y===Number($("yearSelect").value)&&!saved[y]?" (en cours)":""}</span>`).join(""):"<span class='muted'>Enregistrez une évaluation pour afficher le radar.</span>";
+}
+$("individual").onclick=()=>showMode("individual");$("team").onclick=()=>showMode("team");
+$("backChoice").onclick=()=>showMode(mode==="individual"?"team":"individual");
+$("yearSelect").onchange=loadYear;$("saveBtn").onclick=saveCurrent;
+$("resetYear").onclick=()=>{if(confirm("Effacer l’évaluation de cette année sur cet appareil ?")){delete saved[Number($("yearSelect").value)];persist();answers={};renderCriteria();updateProgress();renderYearChecks();renderRadar();$("status").textContent="Évaluation effacée.";}}
+$("resetAll").onclick=()=>{if(confirm("Réinitialiser toutes les évaluations de cette grille sur cet appareil ? Cette action est irréversible si vous n’avez pas exporté de sauvegarde.")){saved={};answers={};persist();selectedYears=[currentYear];renderCriteria();updateProgress();renderYearChecks();renderRadar();$("status").textContent="Toutes les évaluations de cette grille ont été réinitialisées.";}};
+function selectedRows(){
+ const c=criteria(), data={...answers};
+ return c.map((cr,i)=>{const v=Number(data[i])||0;return v?{name:cr[0],level:labels[v-1],number:v,description:cr[1][v-1]}:null;}).filter(Boolean);
+}
+function buildSynthesisHTML(y){
+ const rows=selectedRows(), chart=$("radar").toDataURL("image/png");
+ const identity=escapeHtml($("identityInput").value.trim()||"Non renseigné");
+ const rowsHtml=rows.map(r=>`<tr><th>${escapeHtml(r.name)}</th><td><strong>${escapeHtml(r.level)} · ${r.number}/4</strong></td><td>${escapeHtml(r.description)}</td></tr>`).join("");
+ return `<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Synthèse RMM ${y}</title><style>body{font:13px Arial,sans-serif;color:#183047;margin:28px}h1{font-size:23px}h2{font-size:17px;margin-top:24px}table{width:100%;border-collapse:collapse;margin-top:18px}th,td{text-align:left;vertical-align:top;padding:9px;border-bottom:1px solid #ccd5dc}th{width:28%}img{display:block;max-width:650px;width:100%;margin:16px auto}small{color:#667}@media print{body{margin:14mm}}</style></head><body><p><strong>GRILLE DE MATURITÉ DES RMM</strong></p><h1>${mode==="individual"?"Évaluation individuelle":"Évaluation en équipe"} — ${y}</h1><p><strong>Nom et prénom / équipe :</strong> ${identity}</p><p><strong>Date de réalisation :</strong> ${escapeHtml($("dateInput").value)}</p><table><thead><tr><th>Critère</th><th>Niveau retenu</th><th>Description du niveau sélectionné</th></tr></thead><tbody>${rowsHtml||'<tr><td colspan="3">Aucun critère renseigné.</td></tr>'}</tbody></table><h2>Diagramme radar — ${y}</h2><img src="${chart}" alt="Diagramme radar"><small>Auto-évaluation de maturité — profil descriptif, sans score global ni classement.</small></body></html>`;
+}
+$("pdfBtn").onclick=()=>{
+ saveCurrent();
+ const y=Number($("yearSelect").value), report=$("pdfReport"), rows=selectedRows();
+ renderRadar([y],false);
+ const chart=$("radar").toDataURL("image/png");
+ renderRadar();
+ const identity=escapeHtml($("identityInput").value.trim()||"Non renseigné");
+ const makeRows=list=>list.map(r=>`<tr><th>${escapeHtml(r.name)}</th><td><span class="level-badge level-${r.number}">${escapeHtml(r.level)} · ${r.number}/4</span></td><td>${escapeHtml(r.description)}</td></tr>`).join("");
+ const middle=Math.ceil(rows.length/2), leftRows=rows.slice(0,middle), rightRows=rows.slice(middle);
+ report.innerHTML=`<div class="pdf-kicker">PILIER « SECURITE DES PATIENTS » · ACTIVITÉ OBLIGATOIRE</div><h1>Grille de maturité — Revue de mortalité et de morbidité (RMM)</h1><div class="pdf-meta"><strong>Nom et prénom / équipe :</strong> ${identity} &nbsp;&nbsp; <strong>Année :</strong> ${y}</div><div class="pdf-columns"><div class="pdf-chart"><h2>Diagramme radar — ${y}</h2><img src="${chart}" alt="Diagramme radar"><div class="pdf-legend"><span><i style="display:inline-block;width:16px;height:2px;background:${colorForYear(y)};vertical-align:middle;margin-right:5px"></i>${y}</span></div></div><div class="pdf-results"><table class="report-table"><tbody>${makeRows(leftRows)||'<tr><td colspan="3">Aucun critère renseigné.</td></tr>'}</tbody></table><table class="report-table"><tbody>${makeRows(rightRows)}</tbody></table></div></div><p class="pdf-foot">Auto-évaluation de maturité — profil descriptif, sans score global ni classement.</p>`;
+ const printWindow=window.open("","_blank","width=1200,height=850");
+ if(!printWindow){alert("Autorisez l’ouverture de la fenêtre d’impression pour générer le PDF.");return;}
+ const printStyles=`@page{size:A4 landscape;margin:6mm}
+ *{box-sizing:border-box;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+ html,body{margin:0;padding:0;width:100%;font:8pt/1.12 Arial,sans-serif;color:#111}
+ .pdf-kicker{font-size:8pt;font-weight:800;letter-spacing:.08em;margin:0 0 1.5mm}
+ h1{font-size:15pt;line-height:1.05;margin:0 0 1.5mm}
+ .pdf-meta{font-size:8pt;padding-bottom:1.5mm;margin-bottom:1.5mm;border-bottom:2px solid #111}
+ .pdf-columns{display:flex;flex-direction:column;gap:0}
+ .pdf-chart{width:100%;text-align:center}
+ .pdf-chart h2{font-size:9pt;margin:0}
+ .pdf-chart img{display:block;height:68mm;max-height:68mm;width:auto;max-width:100%;margin:0 auto;object-fit:contain}
+ .pdf-legend{font-size:7pt;margin:0;display:flex;justify-content:center}
+ .pdf-results{display:grid;grid-template-columns:1fr 1fr;gap:5mm;align-items:start}
+ .report-table{width:100%;border-collapse:collapse;font-size:6pt;table-layout:fixed}
+ .report-table tr{break-inside:avoid;page-break-inside:avoid;border-bottom:1px solid #cbd1d5}
+ .report-table th,.report-table td{padding:.8mm;text-align:left;vertical-align:top;line-height:1.08}
+ .report-table th{width:30%;font-size:6pt}
+ .report-table td:nth-child(2){width:25%}.report-table td:nth-child(3){width:45%}
+ .level-badge{display:inline-block;border-radius:5px;padding:.8mm 1mm;font-size:5.7pt;white-space:normal;font-weight:800}
+ .level-1{background:#929292;color:#fff}.level-2{background:#2785cf;color:#fff}
+ .level-3{background:#42a34a;color:#fff}.level-4{background:#f4c644;color:#111}
+ .pdf-foot{font-size:6.5pt;margin-top:1mm}
+ @media screen{body{max-width:285mm;margin:10px auto;padding:10px}}`;
+ printWindow.document.open();
+ printWindow.document.write(`<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Grille de maturité RMM ${y}</title><style>${printStyles}</style></head><body>${report.innerHTML}</body></html>`);
+ printWindow.document.close();
+ printWindow.onload=()=>{printWindow.focus();printWindow.print();};
+};
+$("htmlBtn").onclick=()=>{saveCurrent();const y=Number($("yearSelect").value),blob=new Blob([buildSynthesisHTML(y)],{type:"text/html;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`synthese-RMM-${mode==="individual"?"individuelle":"equipe"}-${y}.html`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
+</script>
+</body>
+</html>
